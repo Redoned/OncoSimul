@@ -651,7 +651,9 @@ test_that("initMutant crashes if > number of genes", {
 test_that("initMutant crashes if not in fitness table even if fewer", {
      o1 <- allFitnessEffects(
          noIntGenes = c("a" = .1, "b" = 0.2, "c" = 0.3))
-     oncoSimulIndiv(o1, initMutant = "a, d")
+     expect_error(oncoSimulIndiv(o1, initMutant = "a, d"),
+                  "For driver or initMutant you have passed genes not in the fitness table",
+                  fixed = TRUE)
 })
 
 
@@ -680,8 +682,21 @@ test_that("initMutant works if == number of genes", {
             )
         }
     }
-
 })
+
+
+## ## zz4: for now, crashing
+## test_that("initMutant: multiple pops", {
+##     o1 <- allFitnessEffects(
+##         noIntGenes = c("a" = .1, "b" = 0.2, "c" = 0.3))
+##     ## zz: test also with the above fitness spec
+##     o2 <- allFitnessEffects(genotFitness = rfitness(2))
+##     oncoSimulIndiv(o2, initMutant = c("B, A", "A"),
+##                    initSize = c(300, 20),
+##                    onlyCancer = FALSE)
+
+    
+## })
 
 test_that("initMutant with freq-dep-fitness"  , {
     r <- data.frame(rfitness(2))
@@ -749,3 +764,6 @@ cat(paste("\n Ending init-mutant tests", date(), "\n"))
 
 cat(paste("  Took ", round(difftime(Sys.time(), inittime, units = "secs"), 2), "\n\n"))
 rm(inittime)
+
+
+
